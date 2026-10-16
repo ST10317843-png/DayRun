@@ -1,5 +1,5 @@
 using DayRun.API.Data;
-using DayRun.Data;
+using DayRun.API.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 

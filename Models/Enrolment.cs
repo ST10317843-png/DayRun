@@ -1,5 +1,4 @@
-﻿using DayRun.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DayRun.API.Models
 {
