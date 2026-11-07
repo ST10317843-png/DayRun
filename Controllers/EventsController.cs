@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DayRun.API.Data;
+using DayRun.API.Models;
+using DayRun.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DayRun.API.Data;
-using DayRun.API.Models;
 using System.Security.Claims;
 
 namespace DayRun.API.Controllers
@@ -83,6 +84,19 @@ namespace DayRun.API.Controllers
             _context.Events.Remove(ev);
             await _context.SaveChangesAsync();
             return NoContent();
+        }
+
+        [HttpPost("{id}/banner")]
+        [Authorize(Roles = "Organiser")]
+        public async Task<IActionResult> UploadBanner(int id, IFormFile file, [FromServices] BlobService blobService)
+        {
+            var ev = await _context.Events.FindAsync(id);
+            if (ev == null) return NotFound();
+
+            var url = await blobService.UploadFileAsync(file);
+            ev.BannerUrl = url;
+            await _context.SaveChangesAsync();
+            return Ok(new { url });
         }
     }
 }
