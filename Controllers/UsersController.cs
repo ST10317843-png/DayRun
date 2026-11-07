@@ -30,9 +30,10 @@ namespace DayRun.API.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _context.Users.FindAsync(int.Parse(userId!));
+            if (user == null) return NotFound();
 
             var url = await blobService.UploadFileAsync(file);
-            user!.ProfilePictureUrl = url;
+            user.ProfilePictureUrl = url;
             await _context.SaveChangesAsync();
             return Ok(new { url });
         }
