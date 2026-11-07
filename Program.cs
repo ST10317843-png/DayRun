@@ -1,12 +1,8 @@
-using DayRun.API.Data;
-using DayRun.API.Data;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore;
-
 using DayRun.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 // Session Setup
@@ -32,65 +28,23 @@ builder.Services.AddHttpClient<ApiService>(client =>
 
 var app = builder.Build();
 
-app.UseStaticFiles();
-app.UseRouting();
-app.UseSession(); // MUST BE BEFORE Authorization
-app.UseAuthorization();
-app.MapDefaultControllerRoute();
-app.Run();
-
-
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Title = "DayRun API",
-        Version = "v1",
-        Description = "API for managing road running, walking, and cycling events in South Africa."
-    });
-});
-
-builder.Services.AddScoped<DayRun.API.Services.BlobService>();
-
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.Cookie.Name = "DayRunAuth";
-        options.ExpireTimeSpan = TimeSpan.FromHours(24);
-        options.SlidingExpiration = true;
-        options.Events.OnRedirectToLogin = context =>
-        {
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            return Task.CompletedTask;
-        };
-        options.Events.OnRedirectToAccessDenied = context =>
-        {
-            context.Response.StatusCode = StatusCodes.Status403Forbidden;
-            return Task.CompletedTask;
-        };
-    });
-
-builder.Services.AddAuthorization();
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseSession(); // MUST BE BEFORE Authorization
 app.UseAuthorization();
-app.MapControllers();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
