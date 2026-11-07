@@ -3,6 +3,43 @@ using DayRun.API.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
+using DayRun.Web.Services;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews();
+
+// Session Setup
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(24);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddHttpContextAccessor();
+
+// API Client with Cookie Support
+builder.Services.AddHttpClient<ApiService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
+}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    UseCookies = true,
+    CookieContainer = new System.Net.CookieContainer()
+});
+
+var app = builder.Build();
+
+app.UseStaticFiles();
+app.UseRouting();
+app.UseSession(); // MUST BE BEFORE Authorization
+app.UseAuthorization();
+app.MapDefaultControllerRoute();
+app.Run();
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
