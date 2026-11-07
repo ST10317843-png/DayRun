@@ -4,6 +4,8 @@ namespace DayRun.API.Models
 {
     public class Event
     {
+        public string? BannerUrl { get; set; }
+
         public int EventId { get; set; }
 
         [Required]
