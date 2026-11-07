@@ -11,7 +11,6 @@ namespace DayRun.Web.Filters
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var sessionRole = context.HttpContext.Session.GetString("Role");
-
             if (string.IsNullOrEmpty(sessionRole))
             {
                 context.Result = new RedirectToActionResult("Login", "Account", null);

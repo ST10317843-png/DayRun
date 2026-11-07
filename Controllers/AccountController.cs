@@ -19,16 +19,17 @@ namespace DayRun.Web.Controllers
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var result = System.Text.Json.JsonDocument.Parse(content).RootElement;
+                var user = result.GetProperty("user");
 
-                // Save role and user details in Server-Side Session
-                HttpContext.Session.SetString("UserId", result.GetProperty("user").GetProperty("userId").GetInt32().ToString());
-                HttpContext.Session.SetString("Role", result.GetProperty("user").GetProperty("role").GetString()!);
-                HttpContext.Session.SetString("Name", result.GetProperty("user").GetProperty("firstName").GetString()!);
+                HttpContext.Session.SetString("UserId", user.GetProperty("userId").GetInt32().ToString());
+                HttpContext.Session.SetString("Role", user.GetProperty("role").GetString()!);
+                HttpContext.Session.SetString("Name", user.GetProperty("firstName").GetString()!);
 
-                var role = result.GetProperty("user").GetProperty("role").GetString();
-                return role == "Organiser" ? RedirectToAction("Dashboard", "Organiser") : RedirectToAction("Index", "Participant");
+                return user.GetProperty("role").GetString() == "Organiser"
+                    ? RedirectToAction("Dashboard", "Organiser")
+                    : RedirectToAction("Index", "Participant");
             }
-            ViewBag.Error = "Invalid credentials.";
+            ViewBag.Error = "Invalid email or password.";
             return View(model);
         }
 
@@ -39,7 +40,7 @@ namespace DayRun.Web.Controllers
         {
             var response = await _api.PostAsync("/api/auth/register", model);
             if (response.IsSuccessStatusCode) return RedirectToAction("Login");
-            ViewBag.Error = "Registration failed.";
+            ViewBag.Error = "Registration failed. Email might exist.";
             return View(model);
         }
 

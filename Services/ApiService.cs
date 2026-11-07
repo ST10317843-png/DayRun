@@ -6,11 +6,7 @@ namespace DayRun.Web.Services
     public class ApiService
     {
         private readonly HttpClient _httpClient;
-
-        public ApiService(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
+        public ApiService(HttpClient httpClient) { _httpClient = httpClient; }
 
         public async Task<T?> GetAsync<T>(string endpoint)
         {
