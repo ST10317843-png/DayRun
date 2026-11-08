@@ -21,10 +21,10 @@ namespace DayRun.API.Models
         [StringLength(100)]
         public string LastName { get; set; } = string.Empty;
 
-        public string? ProfilePictureUrl { get; set; }
-
         [Required]
         public string Role { get; set; } = string.Empty;
+
+        public string? ProfilePictureUrl { get; set; } // NEW for Part 3
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
