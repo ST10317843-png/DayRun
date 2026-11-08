@@ -4,8 +4,6 @@ namespace DayRun.API.Models
 {
     public class Event
     {
-        public string? BannerUrl { get; set; }
-
         public int EventId { get; set; }
 
         [Required]
@@ -34,6 +32,8 @@ namespace DayRun.API.Models
 
         [Required]
         public string Status { get; set; } = "Active";
+
+        public string? BannerUrl { get; set; } // NEW for Part 3
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
