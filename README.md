@@ -4,7 +4,7 @@ A fully functional ASP.NET Core 8 MVC web application consuming a RESTful API. B
 
 ## CI/CD Status
 ![.NET CI](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci.yml/badge.svg)
-*(Note: Insert your actual green CI screenshot below)*
+
 ![Green Build Screenshot](docs/ci-screenshot.png)
 
 ## Prerequisites
