@@ -1,40 +1,27 @@
-# DayRun
+# DayRun - Event Management Platform
 
-# DayRun API
+A fully functional ASP.NET Core 8 MVC web application consuming a RESTful API. Built for managing road running, walking, and cycling events in South Africa.
 
-A RESTful API for managing road running, walking, and cycling events in South Africa. Built with **ASP.NET Core 8**, **Entity Framework Core**, **SQL Server (LocalDB)**, and **Cookie Authentication**.
+## CI/CD Status
+![.NET CI](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci.yml/badge.svg)
+*(Note: Insert your actual green CI screenshot below)*
+![Green Build Screenshot](docs/ci-screenshot.png)
 
-## Roles
-
-| Role | Capabilities |
-|------|--------------|
-| **Organiser** | Create, update, delete events; define categories; view all enrolments for own events; capture results |
-| **Participant** | Register, log in, browse events, enrol in categories, view own enrolments, view own results |
+## Prerequisites
+- .NET 8.0 SDK
+- SQL Server LocalDB
+- Docker Desktop (for containerization)
 
 ## Setup Instructions
+1. Clone the repository.
+2. Open `DayRun.sln` in Visual Studio 2022.
+3. Ensure the API project is running on `http://localhost:5010`.
+4. Update the database: Open Package Manager Console, set Default Project to `DayRun`, and run `Update-Database`.
+5. Ensure `DayRun.Web/appsettings.json` has `"BaseUrl": "http://localhost:5010/"`.
+6. Press `F5` to run both projects.
 
-### Prerequisites
-- Visual Studio 2022 with **ASP.NET and web development** workload
-- .NET 8.0 SDK
-- SQL Server Express LocalDB
-- SQL Server Management Studio (SSMS)
-git clone <your-repo-url>
-cd DayRun
-
-2. Create the LocalDB instance (once):
-SqlLocalDB.exe create "api_booth" -s
-
-3. Open `DayRun.sln` in Visual Studio.
-
-4. Set **DayRun.API** as Startup Project (right-click → Set as Startup Project).
-
-5. Open **Package Manager Console** (Tools → NuGet Package Manager → Package Manager Console).
-
-6. Set **Default project** to `DayRun.API`.
-
-7. Apply migrations:
-8. Update-Database
-9. 
-### Steps
-
-1. Clone the repository:
+## Docker Setup
+To build and run the MVC application in Docker:Access the app at http://localhost:8080.
+```bash
+docker build -t dayrun-mvc -f DayRun.Web/Dockerfile .
+docker run -d -p 8080:8080 --name dayrun-app dayrun-mvc
